@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/rushikesh2/GolangTraining/Gophercises/CLI/task/db"
+	"github.com/rushikesh2/Gophercises/CLI/task/db"
 	"github.com/spf13/cobra"
 )
 

@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/rushikesh2/GolangTraining/Gophercises/secret/encrypt"
+	"github.com/rushikesh2/Gophercises/secret/encrypt"
 	"github.com/spf13/cobra"
 )
 
