@@ -58,3 +58,15 @@ func TestListNegative(t *testing.T) {
 	s := []string{}
 	listCmd.Run(listCmd, s)
 }
+
+// func TestDone(t *testing.T) {
+// 	var tempda = Temp2
+// 	defer func() {
+// 		Temp2 = tempda
+// 	}()
+// 	Temp2 = func(id int) error {
+// 		return errors.New("error")
+// 	}
+// 	s := []string{}
+// 	doneCmd.Run(doneCmd, s)
+// }

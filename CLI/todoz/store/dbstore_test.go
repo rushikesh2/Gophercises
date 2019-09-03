@@ -1,6 +1,7 @@
 package store
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 	"testing"
@@ -67,6 +68,17 @@ func TestGetAll(t *testing.T) {
 func TestInit(t *testing.T) {
 	err := Init("/")
 	if err != nil {
-		t.Error("Failed init..")
+		errors.New("error")
 	}
 }
+
+// func TestInitfunc(t *testing.T) {
+
+// 	home, _ := home.Dir()
+// 	dbPath := filepath.Join(home, "dummy.db")
+// 	err := Init(dbPath)
+// 	//err := Init(dbPath)
+// 	if err != nil {
+// 		t.Error("expected nit got", err)
+// 	}
+// }

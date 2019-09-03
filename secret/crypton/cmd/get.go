@@ -18,8 +18,8 @@ var Getcmd = &cobra.Command{
 			fmt.Println("no values set")
 			return
 		}
-		//fmt.Printf("%s(key) and  %s(value)", key, value)
-		fmt.Println(value)
+		fmt.Printf("%s(key) and  %s(value)", key, value)
+		//fmt.Println(value)
 	},
 }
 
