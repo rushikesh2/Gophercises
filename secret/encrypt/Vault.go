@@ -23,8 +23,10 @@ func NewVault(ekey, fp string) *Vault {
 	}
 }
 
+var opFile = os.Open
+
 func (v *Vault) LoadMapping() error {
-	fptr, err := os.Open(v.filepath)
+	fptr, err := opFile(v.filepath)
 	if err != nil {
 		v.mapping = make(map[string]string)
 		return nil
@@ -45,14 +47,16 @@ func (v *Vault) writemapping(w io.Writer) error {
 	return json.NewEncoder(w).Encode(v.mapping)
 }
 
+var EWrite = EncWriter
+
 func (v *Vault) savemapping() error {
 	f, err := os.OpenFile(v.filepath, os.O_RDWR|os.O_CREATE, 0755)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	writer, err := EncWriter(v.enckey, f) //rgenerates cipher.stream based on key,returns struct streamwriter{writer,stream}  and passes filewriter to
-	if err != nil {                       // to writer and cipher.stream to stream.
+	writer, err := EWrite(v.enckey, f) //rgenerates cipher.stream based on key,returns struct streamwriter{writer,stream}  and passes filewriter to
+	if err != nil {                    // to writer and cipher.stream to stream.
 		return err // internally streamwriter uses XORKeyStream() on stream and passes it to writer on write
 	} //				.|.
 	return v.writemapping(writer) // cipher.StreamWriter writes to json.NewEncoder(<writer>) (interface chaining)

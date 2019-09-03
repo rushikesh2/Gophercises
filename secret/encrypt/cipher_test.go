@@ -1,7 +1,10 @@
 package encrypt
 
 import (
+	"crypto/cipher"
+	"errors"
 	"fmt"
+	"io"
 	"testing"
 )
 
@@ -28,4 +31,64 @@ func TestEncDec(test *testing.T) {
 		fmt.Printf("Failed.Expeced %s got %s", text, plaintext)
 		//errors.New(fmt.printf("Failed.Expeced %s got %s", text, plaintext))
 	}
+}
+
+func TestEn(t *testing.T) {
+	tedef := Cip
+	defer func() {
+		Cip = tedef
+	}()
+
+	Cip = func(key string) (cipher.Block, error) {
+		return nil, errors.New("Error")
+	}
+	Enc("hi", "wel")
+}
+
+func TestEnc(t *testing.T) {
+	tedef := EncR
+	defer func() {
+		EncR = tedef
+	}()
+
+	EncR = func(r io.Reader, buf []byte) (n int, err error) {
+		return 0, errors.New("Error")
+	}
+	Enc("hi", "wel")
+}
+
+func TestDn(t *testing.T) {
+	tedef := Cip
+	defer func() {
+		Cip = tedef
+	}()
+
+	Cip = func(key string) (cipher.Block, error) {
+		return nil, errors.New("Error")
+	}
+	Dec("hi", "wel")
+}
+
+func TestDec(t *testing.T) {
+	tedef := decS
+	defer func() {
+		decS = tedef
+	}()
+
+	decS = func(s string) ([]byte, error) {
+		return nil, errors.New("Error")
+	}
+	Dec("hi", "wel")
+}
+
+func TestDecc(t *testing.T) {
+	tedef := decS
+	defer func() {
+		decS = tedef
+	}()
+
+	decS = func(s string) ([]byte, error) {
+		return nil, errors.New("Error")
+	}
+	Dec("", "")
 }

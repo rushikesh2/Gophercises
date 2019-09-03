@@ -1,6 +1,9 @@
 package encrypt
 
 import (
+	"crypto/cipher"
+	"errors"
+	"io"
 	"os"
 	"path/filepath"
 	"testing"
@@ -23,28 +26,6 @@ func secretpath() string {
 	home, _ := homedir.Dir()
 	return filepath.Join(home, "test.txt")
 }
-
-// func TestSetAndGet(test *testing.T) {
-// 	for _, values := range testcase {
-// 		err := dummyvault.Set(values.key, values.val)
-// 		if err != nil {
-// 			test.Error(err)
-// 		}
-
-// 	}
-// 	for _, values := range testcase {
-// 		val, err := dummyvault.Get(values.key)
-// 		if err != nil {
-// 			test.Error(err)
-// 			break
-// 		}
-// 		if val != values.val {
-// 			fmt.Printf("Expected %s and got %s \n", values.val, val)
-// 			test.Error("Test failed ")
-// 		}
-// 	}
-
-// }
 
 func TestSet(t *testing.T) {
 	file := secretpath()
@@ -118,4 +99,33 @@ func TestSave(t *testing.T) {
 func deleteFile() {
 	file := secretpath()
 	os.Remove(file)
+}
+
+func TestLoadM(t *testing.T) {
+	tedef := opFile
+	defer func() {
+		opFile = tedef
+	}()
+
+	opFile = func(name string) (*os.File, error) {
+		return nil, errors.New("Error")
+	}
+	ekey := "text"
+	v := NewVault(ekey, "/")
+	v.LoadMapping()
+}
+
+func TestSaveM(t *testing.T) {
+	tedef := EWrite
+	defer func() {
+		EWrite = tedef
+	}()
+
+	EWrite = func(key string, w io.Writer) (*cipher.StreamWriter, error) {
+		return nil, errors.New("Error")
+	}
+	ekey := "text"
+	fp := "abc"
+	v := NewVault(ekey, fp)
+	v.savemapping()
 }

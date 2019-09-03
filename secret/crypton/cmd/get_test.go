@@ -14,7 +14,7 @@ func TestGet(t *testing.T) {
 	file, _ := os.OpenFile("testing.txt", os.O_CREATE|os.O_RDWR, 0666)
 	oldStdout := os.Stdout
 	os.Stdout = file
-	a := []string{"abc"}
+	a := []string{"amar"}
 	Getcmd.Run(Getcmd, a)
 	file.Seek(0, 0)
 	content, err := ioutil.ReadAll(file)
@@ -22,8 +22,8 @@ func TestGet(t *testing.T) {
 		t.Error("error occured while test case : ", err)
 	}
 	output := string(content)
-	val := strings.Contains(output, "")
-	assert.Equalf(t, true, val, "they should be equal")
+	val := strings.Contains(output, "no value set")
+	assert.Equalf(t, false, val, "they should be equal")
 	file.Truncate(0)
 	file.Seek(0, 0)
 	os.Stdout = oldStdout
@@ -35,7 +35,7 @@ func TestGet(t *testing.T) {
 // 	file, _ := os.OpenFile("testing.txt", os.O_CREATE|os.O_RDWR, 0666)
 // 	oldStdout := os.Stdout
 // 	os.Stdout = file
-// 	a := []string{"twitter", "twitter123"}
+// 	a := []string{"amar", "akbar"}
 // 	Getcmd.Run(Getcmd, a)
 // 	file.Seek(0, 0)
 // 	content, err := ioutil.ReadAll(file)
@@ -43,12 +43,11 @@ func TestGet(t *testing.T) {
 // 		t.Error("error occured while test case : ", err)
 // 	}
 // 	output := string(content)
-// 	val := strings.Contains(output, "twitter")
+// 	val := strings.Contains(output, akbar)
 // 	assert.Equalf(t, true, val, "they should be equal")
 // 	file.Truncate(0)
 // 	file.Seek(0, 0)
 // 	os.Stdout = oldStdout
 // 	fmt.Println(string(content))
 // 	file.Close()
-
 // }
