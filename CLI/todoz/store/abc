@@ -1,0 +1,17 @@
+mode: set
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:18.25,23.2 3 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:25.25,27.2 1 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:30.43,32.45 2 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:40.2,40.16 1 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:32.45,38.3 5 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:43.32,44.45 1 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:44.45,47.3 2 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:51.32,53.43 2 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:64.2,64.22 1 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:53.43,56.66 3 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:62.3,62.13 1 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:56.66,61.4 1 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:66.32,69.16 3 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:72.2,72.45 1 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:69.16,71.3 1 1
+github.com/gophercises/gophercise15/todoz/store/dbstore.go:72.45,75.3 2 1
