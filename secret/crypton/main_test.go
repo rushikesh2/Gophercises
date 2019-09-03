@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestMain(t *testing.T) {
+func TestMainFunc(t *testing.T) {
 	defer func() {
 		err := recover()
 		if err != nil {

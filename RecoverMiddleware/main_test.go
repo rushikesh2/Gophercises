@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestMain(t *testing.T) {
+func TestMainFunc(t *testing.T) {
 
 	tempListenAndServer := listenAndServerFunc
 	defer func() {

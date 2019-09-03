@@ -10,104 +10,37 @@ import (
 func TestTranform(t *testing.T) {
 	var image io.Reader
 	image, _ = os.Open("input.png")
-	image, err := Transform(image, ".png", 20, WithMode(ModeCircle))
+	image, err := Transform(image, ".png", "2", "100")
 	if err != nil {
-		t.Error("Error to transform", err)
+		t.Error("Expected reader got", err)
 	}
 }
-
 func TestPrimitive(t *testing.T) {
-	_, err := primitive("in.png", "out.png", 20, "abc.png")
+	_, err := primitive("-i in.png -o out.png -n 20 -m 0", "out.png")
 	if err == nil {
-		t.Error("Expected image got")
+		t.Error("Expected img got", err)
 	}
-
-}
-
-func TestPri(t *testing.T) {
-	tedef := tempD
-	defer func() {
-		tempD = tedef
-	}()
-
-	tempD = func(prefix, ext string) (*os.File, error) {
-		return nil, errors.New("Error")
+	_, err = primitive("-i input.png -o output.png -n 10 -m 0", "out.png")
+	if err == nil {
+		t.Error("Expected img got", err)
 	}
-	var image io.Reader
-	image, _ = os.Open("input.png")
-	Transform(image, ".png", 20, WithMode(ModeCircle))
-}
-
-func TestPrimit(t *testing.T) {
-	tedef := tempDa
-	defer func() {
-		tempDa = tedef
-	}()
-
-	tempDa = func(prefix, ext string) (*os.File, error) {
-		return nil, errors.New("Error")
-	}
-	var image io.Reader
-	image, _ = os.Open("input.png")
-	Transform(image, ".png", 20, WithMode(ModeCircle))
-}
-
-func TestPriCop(t *testing.T) {
-	tedef := cop
-	defer func() {
-		cop = tedef
-	}()
-
-	cop = func(dst io.Writer, src io.Reader) (written int64, err error) {
-		return 0, errors.New("Error")
-	}
-	var image io.Reader
-	image, _ = os.Open("input.png")
-	Transform(image, ".png", 20, WithMode(ModeCircle))
-}
-
-func TestPriCops(t *testing.T) {
-	tedef := cops
-	defer func() {
-		cops = tedef
-	}()
-
-	cops = func(dst io.Writer, src io.Reader) (written int64, err error) {
-		return 0, errors.New("Error")
-	}
-	var image io.Reader
-	image, _ = os.Open("input.png")
-	Transform(image, ".png", 20, WithMode(ModeCircle))
-}
-
-func TestPrim(t *testing.T) {
-	tedef := prim
-	defer func() {
-		prim = tedef
-	}()
-	prim = func(inputFile, outputFile string, numShapes int, args ...string) (string, error) {
-		return "img", errors.New("Error")
-	}
-	var image io.Reader
-	image, _ = os.Open("input.png")
-	Transform(image, ".png", 20, WithMode(ModeCircle))
 }
 
 func TestTempFile(t *testing.T) {
 	_, err := tempfile("", "")
 	if err != nil {
-		t.Error("primitive: failed to create temporary file")
+		t.Error("error in creating tempFile")
 	}
 }
 
-func TestTem(t *testing.T) {
-	tedef := temp
+func TestFileCheck(t *testing.T) {
+	var check = Filecheck
 	defer func() {
-		temp = tedef
+		Filecheck = check
 	}()
 
-	temp = func(dir, pattern string) (f *os.File, err error) {
-		return nil, errors.New("Error")
+	Filecheck = func(name string) (*os.File, error) {
+		return nil, errors.New("error")
 	}
-	tempfile("", "")
+	primitive("in.png", "input.png")
 }

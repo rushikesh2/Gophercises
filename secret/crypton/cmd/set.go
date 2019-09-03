@@ -18,7 +18,7 @@ var Setcmd = &cobra.Command{
 		value := strings.Join(args[1:], " ")
 		err := vault.Set(key, value)
 		if err != nil {
-			panic(err)
+			return
 		}
 		fmt.Println("Data successfully encoded.")
 	},

@@ -1,12 +1,12 @@
 package main
+
 import (
-	"testing"
 	"errors"
+	"testing"
 )
 
-
-func TestMain(t *testing.T){
+func TestMainFunc(t *testing.T) {
 	HandleError(errors.New("dummy error"))
 	main()
-	
+
 }

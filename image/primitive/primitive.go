@@ -1,8 +1,6 @@
 package primitive
 
 import (
-	"bytes"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -11,91 +9,49 @@ import (
 	"strings"
 )
 
-// Mode defines the shapes used when transforming images.
-type Mode int
-
-// Modes supported by the primitive package.
-const (
-	ModeCombo Mode = iota
-	ModeTriangle
-	ModeRect
-	ModeEllipse
-	ModeCircle
-	ModeRotatedRect
-	ModeBeziers
-	ModeRotatedEllipse
-	ModePolygon
-)
-
-// WithMode is an option for the Transform function that will define the
-// mode you want to use. By default, ModeTriangle will be used.
-func WithMode(mode Mode) func() []string {
-	return func() []string {
-		return []string{"-m", fmt.Sprintf("%d", mode)}
+//Transform function will transform the image using primitive package
+func Transform(image io.Reader, ext, mode, numShapes string) (io.Reader, error) {
+	var outputFile io.Reader
+	in, err := tempfile("in_", ext)
+	if err == nil {
+		defer os.Remove(in.Name())
+		out, err := tempfile("out_", ext)
+		if err == nil {
+			defer os.Remove(out.Name())
+			_, err = io.Copy(in, image)
+			if err == nil {
+				args := fmt.Sprintf("-i %s -o %s -n %s -m %s", in.Name(), out.Name(), numShapes, mode)
+				outputFile, err = primitive(args, out.Name())
+			}
+		}
 	}
+
+	return outputFile, err
 }
 
-var tempD = tempfile
-var tempDa = tempfile
-var cop = io.Copy
-var cops = io.Copy
-var prim = primitive
+var Filecheck = os.Open
 
-// Transform will take the provided image and apply a primitive
-// transformation to it, then return a reader to the resulting image.
-func Transform(image io.Reader, ext string, numShapes int, opts ...func() []string) (io.Reader, error) {
-	var args []string
-	for _, opt := range opts {
-		args = append(args, opt()...)
-	}
-
-	in, err := tempD("in_", ext)
+//primitive will create an image using primitive packge with diffrent shapes from an input image
+func primitive(args, fileName string) (io.Reader, error) {
+	cmd := exec.Command("primitive", strings.Fields(args)...)
+	_, err := cmd.CombinedOutput()
 	if err != nil {
-		return nil, errors.New("primitive: failed to create temporary input file")
+		return nil, err
 	}
-	defer os.Remove(in.Name())
-	out, err := tempDa("in_", ext)
+	out, err := Filecheck(fileName)
 	if err != nil {
-		return nil, errors.New("primitive: failed to create temporary output file")
+		return nil, err
 	}
-	defer os.Remove(out.Name())
-
-	// Read image into in file
-	_, err = cop(in, image)
-	if err != nil {
-		return nil, errors.New("primitive: failed to copy image into temp input file")
-	}
-
-	// Run primitive w/ -i in.Name() -o out.Name()
-	stdCombo, err := prim(in.Name(), out.Name(), numShapes, args...)
-	if err != nil {
-		return nil, fmt.Errorf("primitive: failed to run the primitive command. stdcombo=%s", stdCombo)
-	}
-
-	// read out into a reader, return reader, delete out
-	b := bytes.NewBuffer(nil)
-	_, err = cops(b, out)
-	if err != nil {
-		return nil, errors.New("primitive: Failed to copy output file into byte buffer")
-	}
-	return b, nil
+	return out, nil
 }
 
-func primitive(inputFile, outputFile string, numShapes int, args ...string) (string, error) {
-	argStr := fmt.Sprintf("-i %s -o %s -n %d", inputFile, outputFile, numShapes)
-	args = append(strings.Fields(argStr), args...)
-	cmd := exec.Command("primitive", args...)
-	b, err := cmd.CombinedOutput()
-	return string(b), err
-}
-
-var temp = ioutil.TempFile
-
+//create the temprary file to store images uploaded
 func tempfile(prefix, ext string) (*os.File, error) {
-	in, err := temp("", prefix)
-	if err != nil {
-		return nil, errors.New("primitive: failed to create temporary file")
+	var out *os.File
+	in, err := ioutil.TempFile("", prefix)
+	if err == nil {
+		defer os.Remove(in.Name())
+		out, err = os.Create(fmt.Sprintf("%s.%s", in.Name(), ext))
 	}
-	defer os.Remove(in.Name())
-	return os.Create(fmt.Sprintf("%s.%s", in.Name(), ext))
+	return out, err
 }
