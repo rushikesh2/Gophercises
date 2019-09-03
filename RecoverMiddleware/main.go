@@ -23,10 +23,12 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/debug/", sourceCodeHandler)
 	mux.HandleFunc("/panic/", panicDemo)
-	//mux.HandleFunc("/panic-after/", panicAfterDemo)
-	//mux.HandleFunc("/", hello)
 	log.Fatal(listenAndServerFunc(":5000", middleware(mux)))
 }
+
+var copyData = io.Copy
+
+var styleH = styles.Get
 
 func sourceCodeHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.FormValue("path")
@@ -36,23 +38,25 @@ func sourceCodeHandler(w http.ResponseWriter, r *http.Request) {
 		line = -1
 	}
 	file, err := os.Open(path)
-	// if err != nil {
-	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	b := bytes.NewBuffer(nil)
-	_, err = io.Copy(b, file)
-	// if err != nil {
-	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
+	_, err = copyData(b, file)
+	//_, err = io.Copy(b, file)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	var lines [][2]int
 	if line > 0 {
 		lines = append(lines, [2]int{line, line})
 	}
 	lexer := lexers.Get("go")
 	iterator, err := lexer.Tokenise(nil, b.String())
-	style := styles.Get("dracula")
+	//Style = styles.Get("dracula")
+	style := styleH("dracula")
 	if style == nil {
 		style = styles.Fallback
 	}
@@ -60,7 +64,7 @@ func sourceCodeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	fmt.Fprint(w, "<style>pre { font-size: 1.2em; }</style>")
 	formatter.Format(w, style, iterator)
-	// _ = quick.Highlight(w, b.String(), "go", "html", "monokoi")
+
 }
 
 func middleware(app http.Handler) http.HandlerFunc {
@@ -82,18 +86,9 @@ func panicDemo(w http.ResponseWriter, r *http.Request) {
 	funcThatPanics()
 }
 
-// func panicAfterDemo(w http.ResponseWriter, r *http.Request) {
-// 	fmt.Fprint(w, "<h1>Hello!</h1>")
-// 	funcThatPanics()
-// }
-
 func funcThatPanics() {
 	panic("Oh no!")
 }
-
-// func hello(w http.ResponseWriter, r *http.Request) {
-// 	fmt.Fprintln(w, "<h1>Hello!</h1>")
-// }
 
 func createLinks(stack string) string {
 	lines := strings.Split(stack, "\n")
