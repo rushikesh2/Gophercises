@@ -57,9 +57,8 @@ func sourceCodeHandler(w http.ResponseWriter, r *http.Request) {
 	iterator, err := lexer.Tokenise(nil, b.String())
 	//Style = styles.Get("dracula")
 	style := styleH("dracula")
-	if style == nil {
-		style = styles.Fallback
-	}
+	style = styles.Fallback
+
 	formatter := html.New(html.TabWidth(2), html.WithLineNumbers(), html.LineNumbersInTable(), html.HighlightLines(lines))
 	w.Header().Set("Content-Type", "text/html")
 	fmt.Fprint(w, "<style>pre { font-size: 1.2em; }</style>")

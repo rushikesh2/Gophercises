@@ -61,11 +61,11 @@ func TestSourceHandler(t *testing.T) {
 	}{
 		{
 			testCaseName: "TC1",
-			url:          "line=24&path=C:/Users/gs-2019/gocode/src/github.com/rushikesh2/Gophercises/RecoverMIddleware/main.go",
+			url:          "line=24&path=/home/rushikesh/go/src/github.com/rushikesh2/Gophercises/RecoverMiddleware/main.go",
 			status:       200,
 		}, {
 			testCaseName: "TC2",
-			url:          "line=ewr&path=C:/Users/gs-2019/gocode/src/github.com/rushikesh2/Gophercises/RecoverMIddleware/main.go",
+			url:          "line=ewr&path=/home/rushikesh/go/src/github.com/rushikesh2/Gophercises/RecoverMiddleware/main.go",
 			status:       500,
 		}, {
 			testCaseName: "TC3",
@@ -104,11 +104,11 @@ func TestSourceNegative(t *testing.T) {
 	}{
 		{
 			testCaseName: "TC2",
-			url:          "line=ewr&path=C:/Users/gs-2019/gocode/src/github.com/rushikesh2/Gophercises/RecoverMIddleware/main.go",
+			url:          "line=ewr&path=/home/rushikesh/go/src/github.com/rushikesh2/Gophercises/RecoverMiddleware/main.go",
 			status:       200,
 		}, {
 			testCaseName: "TC1",
-			url:          "line=24&path=C:/Users/gs-2019/gocode/src/github.com/rushikesh2/Gophercises/RecoverMIddleware/main.go",
+			url:          "line=24&path=/home/rushikesh/go/src/github.com/rushikesh2/Gophercises/RecoverMiddleware/main.go",
 			status:       500,
 		},
 	}
